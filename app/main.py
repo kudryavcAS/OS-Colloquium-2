@@ -71,7 +71,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 @app.post("/tasks", response_model=schemas.Task, status_code=201)
 def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db),
                 current_user: models.User = Depends(get_current_user)):
-    new_task = models.Task(**task.dict(), owner_id=current_user.id)
+    new_task = models.Task(**task.model_dump(), owner_id=current_user.id)
     db.add(new_task)
     db.commit()
     db.refresh(new_task)
@@ -99,7 +99,7 @@ def update_task_full(task_id: int, task_in: schemas.TaskCreate, db: Session = De
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    task_query.update(task_in.dict())
+    task_query.update(task_in.model_dump())
     db.commit()
     return task_query.first()
 
@@ -112,7 +112,7 @@ def update_task_partial(task_id: int, task_in: schemas.TaskUpdate, db: Session =
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    update_data = task_in.dict(exclude_unset=True)
+    update_data = task_in.model_dump(exclude_unset=True)
     task_query.update(update_data)
     db.commit()
     return task_query.first()
