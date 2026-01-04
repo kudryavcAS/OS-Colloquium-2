@@ -3,7 +3,7 @@ from typing import Optional
 from jose import jwt
 from passlib.context import CryptContext
 
-SECRET_KEY = "super_secret_key_CHANGE_ME"
+SECRET_KEY = "!!!You MUST change this KEY!!!"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
